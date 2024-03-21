@@ -43,7 +43,7 @@ parser.add_argument("-arb","--apply_rgb_blur",action="store_true", help="Whether
 parser.add_argument("-adb","--apply_depth_blur",action="store_true", help="Whether or not to apply depth blur augmentation")
 parser.add_argument("-dfc", "--data_format_condition", choices=["depth","rgbd"],default="depth", help="Data format for the condition input")
 parser.add_argument("-dfd", "--data_format_diffusion", choices=["depth","rgbd"],default="depth", help="Data format for the diffusion input")
-parser.add_argument("-bd","--base_dir", default="/tf", help="Base directory for saving output directories and loading datasets from")
+parser.add_argument("-bd","--base_dir", default="/content/tf", help="Base directory for saving output directories and loading datasets from")
 args = parser.parse_args()
 # fmt: on
 
@@ -78,8 +78,6 @@ import imports.dataset as cdd_dataset
 import imports.helper as cdd_helper
 import imports.model as cdd_model
 
-result = subprocess.run(["git", "rev-parse", "HEAD"], stdout=subprocess.PIPE, check=True)
-currentCommit = result.stdout.decode("utf-8").strip()
 
 CONFIG = {
     "MODEL": args.model_architecture,
@@ -108,7 +106,6 @@ CONFIG = {
     "RESTORE_CHECKPOINT": bool(args.checkpoint_path_to_restore),
     "CHECKPOINT_PATH_TO_RESTORE": args.checkpoint_path_to_restore,
     "CHECKPOINT_FREQUENCY": args.checkpoint_period,
-    "GIT_COMMIT": currentCommit,
     "CROP_WIDTH_HALF": args.crop_width_half,
     "SAMPLE_FREQUENCY": args.sample_frequency,
     "TEST_FREQUENCY": args.test_frequency,
@@ -165,7 +162,7 @@ else:
 RANDOM_SEED = 1911
 tf.random.set_seed(RANDOM_SEED)
 
-strategy, CONFIG["RUNTIME_ENVIRONMENT"], hw_accelerator_handle = DeepSaki.DetectHw()
+strategy, CONFIG["RUNTIME_ENVIRONMENT"], hw_accelerator_handle = DeepSaki.utils.DetectHw()
 CONFIG["GLOBAL_BATCH_SIZE"] = CONFIG["BATCH_SIZE_PER_REPLICA"] * strategy.num_replicas_in_sync
 CONFIG["DISTRIBUTED_TRAINING"] = isinstance(strategy, tf.distribute.MirroredStrategy)
 

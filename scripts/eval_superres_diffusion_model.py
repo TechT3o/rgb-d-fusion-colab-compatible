@@ -7,7 +7,7 @@ parser.add_argument("-n", "--number_samples", type=int, default=None, help="Numb
 parser.add_argument("-d", "--dataset", default="v_human_rendered", choices=["v_human_rendered","24k_358seg_equalised","19k_316seg_equalised"], help="The dataset used for evaluation")
 parser.add_argument("-a", "--xla_accelerate",action="store_true", help="Whether or not to accelerate using XLA for algebraic computations")
 parser.add_argument("-m", "--mixed_precission",action="store_true", help="Whether or not to use mixed precission")
-parser.add_argument("-bd","--base_dir", default="/tf", help="Base directory for saving output directories and loading datasets from")
+parser.add_argument("-bd","--base_dir", default="/content/tf", help="Base directory for saving output directories and loading datasets from")
 parser.add_argument("checkpoint", help="Path to the checkpoint that should be restored.")
 parser.add_argument("config_file", help="Path to the configfile that has been generated during training")
 args = parser.parse_args()
